@@ -1,10 +1,14 @@
 package com.oao.controller;
 
+import com.oao.model.request.HouseCreationRequest;
+import com.oao.model.response.CreateHouseResponse;
+import com.oao.model.response.ErrorResponse;
 import com.oao.service.HousesManagementService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.Objects;
 import javax.validation.Valid;
 import java.net.HttpURLConnection;
@@ -24,14 +28,30 @@ public class HousesManagementController {
     }
 
     @PostMapping("/house")
-    @ApiOperation(value = "Transfer the money between the accounts")
+    @ApiOperation(value = "Create the house")
     @ApiResponses(value = {
-            @ApiResponse(code = HttpURLConnection.HTTP_NO_CONTENT, message = "Transfer has been done.", response = ErrorResponse.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_CREATED, message = "House has been created.", response = CreateHouseResponse.class),
             @ApiResponse(code = HttpURLConnection.HTTP_BAD_REQUEST, message = "The request is missing or have badly formatted"),
             @ApiResponse(code = HttpURLConnection.HTTP_UNAVAILABLE, message = "Server error", response = ErrorResponse.class)
     })
-    public void saveHouse(@RequestBody @Valid TransferMoneyRequest transferMoneyRequest) {
+    public CreateHouseResponse saveHouse(@RequestBody @Valid HouseCreationRequest transferMoneyRequest) {
+        String houseId = housesManagementService.saveHouse(transferMoneyRequest.getHouseNumber(), transferMoneyRequest.getStreetName(),
+                transferMoneyRequest.getPostalCode(), transferMoneyRequest.getOwner());
 
-        housesManagementService.saveHouse(transferMoneyRequest);
+        return CreateHouseResponse.builder()
+                .houseId(houseId)
+                .build();
+    }
+
+    @DeleteMapping("/houses/{houseId}")
+    @ApiOperation(value = "Delete related house form database")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpURLConnection.HTTP_NO_CONTENT, message = "House has been deleted"),
+            @ApiResponse(code = HttpURLConnection.HTTP_INTERNAL_ERROR, message = "Server error", response = ErrorResponse.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "If the house id is not found.", response = ErrorResponse.class),
+
+    })
+    public void removeHouse(@PathVariable String houseId) {
+        housesManagementService.removeHouse(houseId);
     }
 }

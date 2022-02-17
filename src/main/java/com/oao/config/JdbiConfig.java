@@ -27,7 +27,7 @@ public class JdbiConfig {
     }
 
     @Bean
-    HousesManagementDAO accountInfoDAO(Jdbi jdbi) {
+    HousesManagementDAO housesManagementDAO(Jdbi jdbi) {
         return jdbi.onDemand(HousesManagementDAO.class);
     }
 

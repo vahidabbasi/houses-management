@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -24,7 +26,7 @@ public class HousesManagementExceptionHandler {
     }
 
     @ExceptionHandler(HousesManagementException.class)
-    public ResponseEntity bankHousesManagementException(HousesManagementException exception) {
+    public ResponseEntity handleHousesManagementException(HousesManagementException exception) {
         log.error("housesManagementException: {}", exception.getMessage());
         return createError(exception.getHttpStatus(), exception.getDisplayMessage());
     }
@@ -32,7 +34,14 @@ public class HousesManagementExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity handleHttpMessageNotReadableException(HttpMessageNotReadableException exception) {
         log.error("HttpMessageNotReadableException: ", exception);
-        return badRequest();
+        return badRequest("Format not supported");
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity handleMethodArgumentNotValidException(final MethodArgumentNotValidException exception) {
+        log.error("MethodArgumentNotValidException: ", exception);
+        final FieldError fieldError = exception.getBindingResult().getFieldError();
+        return badRequest(fieldError.getField() + ": " + fieldError.getDefaultMessage());
     }
 
     /**
@@ -55,7 +64,7 @@ public class HousesManagementExceptionHandler {
     /**
      * Returns a 400 BAD_REQUEST response with the specified status.
      */
-    private ResponseEntity<ErrorResponse> badRequest() {
-        return createError(HttpStatus.BAD_REQUEST, "format not supported");
+    private ResponseEntity<ErrorResponse> badRequest(String message) {
+        return createError(HttpStatus.BAD_REQUEST, message);
     }
 }

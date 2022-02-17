@@ -1,24 +1,27 @@
 package com.oao.validators;
 
+import com.oao.exceptions.HousesManagementException;
+import com.oao.repository.HousesManagementDAO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 @Component
 public class RequestValidator {
-/*
-    public void validateTransferMoneyRequest(TransferMoneyRequest transferMoneyRequest, Account accountFrom,
-                                             Account accountTo) {
 
-        if (transferMoneyRequest.getAccountFromIban().equals(transferMoneyRequest.getAccountToIban())) {
-            throw new BankAccountException("Account from iban and account to iban should not be the same", HttpStatus.BAD_REQUEST);
-        } else if (accountFrom.getAccountBalance().compareTo(transferMoneyRequest.getAmount()) < 0) {
-            throw new BankAccountException("Account with id: " + accountFrom.getAccountIban() +
-                    " does not have enough balance to transfer.", HttpStatus.BAD_REQUEST);
-        } else if (accountFrom.getAccountType().equals(AccountType.SAVING_ACCOUNT.getAccountTypeCode()) &&
-                !accountTo.getAccountType().equals(AccountType.CHECKING_ACCOUNT.getAccountTypeCode())) {
-            throw new BankAccountException("Only transferring money from the savings account to the checking account is possible", HttpStatus.BAD_REQUEST);
-        } else if (accountFrom.getAccountType().equals(AccountType.PRIVATE_LOAN_ACCOUNT.getAccountTypeCode())) {
-            throw new BankAccountException("Withdrawal from private loan account is not possible", HttpStatus.BAD_REQUEST);
+    private final HousesManagementDAO housesManagementDAO;
+
+    @Autowired
+    public RequestValidator(HousesManagementDAO housesManagementDAO) {
+        Objects.requireNonNull(housesManagementDAO, "housesManagementDAO was null when injected");
+        this.housesManagementDAO = housesManagementDAO;
+    }
+    public void validateRemoveHouseRequest(String houseId) {
+
+        if (housesManagementDAO.hasHouse(houseId) != 1) {
+            throw new HousesManagementException("House with id " + houseId + " not found", HttpStatus.NOT_FOUND);
         }
-    }*/
+    }
 }

@@ -7,22 +7,32 @@
     http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <changeSet author="vahid abbasi" id="1">
+        <createSequence cycle="true"
+                        incrementBy="1"
+                        ordered="true"
+                        schemaName="public"
+                        sequenceName="seq_id"
+                        startValue="1"/>
         <createTable tableName="house_info">
-            <column autoIncrement="true" name="id" type="INT">
-                <constraints unique="true"/>
+            <column name="house_id" type="INT">
+                <constraints primaryKey="true"/>
             </column>
-            <column name="house_number" type="VARCHAR(20)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_house_info"/>
+            <column name="house_number" type="VARCHAR(6)">
+                <constraints nullable="false"/>
             </column>
             <column name="street_name" type="VARCHAR(100)">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
-            <column name="postal_code" type="VARCHAR(10)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_house_info"/>
+            <column name="postal_code" type="INT">
+                <constraints nullable="false"/>
             </column>
             <column name="owner" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
+            <column name="created_at" type="timestamp" defaultValue="SYSDATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deleted_at" type="timestamp"/>
         </createTable>
         <rollback>
             <dropTable tableName="house_info"/>

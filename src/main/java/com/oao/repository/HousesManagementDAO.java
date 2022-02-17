@@ -1,27 +1,21 @@
 package com.oao.repository;
 
-import org.jdbi.v3.sqlobject.config.RegisterConstructorMapper;
 import org.jdbi.v3.sqlobject.customizer.Bind;
+import org.jdbi.v3.sqlobject.statement.GetGeneratedKeys;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 import org.jdbi.v3.sqlobject.statement.SqlUpdate;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
 
 public interface HousesManagementDAO {
 
-   /* @SqlQuery("SELECT * FROM ACCOUNT_INFO WHERE ACCOUNT_TYPE = :accountType")
-    @RegisterConstructorMapper(Account.class)
-    List<Account> getAccounts(@Bind("accountType") String accountType);
+    @SqlUpdate("INSERT INTO HOUSE_INFO(HOUSE_ID, HOUSE_NUMBER, STREET_NAME, POSTAL_CODE, OWNER) VALUES(nextval('seq_id'), ?, ?, ?, ?)")
+    @GetGeneratedKeys("HOUSE_ID")
+    String saveHouse(String houseNumber,String streetName,int postalCode,String owner);
 
-    @SqlQuery("SELECT ACCOUNT_BALANCE FROM ACCOUNT_INFO WHERE ACCOUNT_IBAN = :accountIban")
-    Optional<BigDecimal> getBalance(@Bind("accountIban") String accountIban);
+    @SqlUpdate("UPDATE HOUSE_INFO SET DELETED_AT = SYSDATE WHERE HOUSE_ID = :houseId")
+    void removeHouse(@Bind("houseId") String houseId);
 
-    @SqlUpdate("UPDATE ACCOUNT_INFO SET ACCOUNT_BALANCE = :accountBalance WHERE ACCOUNT_IBAN = :accountIban")
-    void updateBalance(@Bind("accountIban") String accountIban, @Bind("accountBalance") BigDecimal accountBalance);
+    @SqlQuery("select count(*) from HOUSE_INFO where HOUSE_ID= :houseId")
+    int hasHouse(@Bind("houseId") String houseId);
 
-    @SqlQuery("SELECT * FROM ACCOUNT_INFO WHERE ACCOUNT_IBAN = :accountIban")
-    @RegisterConstructorMapper(Account.class)
-    Optional<Account> getAccount(@Bind("accountIban") String accountIban);*/
 }
