@@ -14,9 +14,7 @@ public final class TestUtils {
     public static final String STREET_NAME = "Kurmainzer str";
     public static final int POSTAL_CODE = 12345;
     public static final String OWNER = "vahid_abbasi";
-    public static final CreateHouseResponse CREATE_HOUSE_RESPONSE = CreateHouseResponse.builder()
-            .houseId(HOUSE_ID)
-            .build();
+
     public static final HouseCreationRequest HOUSE_CREATION_REQUEST = HouseCreationRequest.builder()
             .houseNumber(HOUSE_NUMBER)
             .streetName(STREET_NAME)

@@ -6,6 +6,8 @@ import com.oao.model.response.ErrorResponse;
 import com.oao.service.HousesManagementService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,6 +53,7 @@ public class HousesManagementController {
             @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "If the house id is not found.", response = ErrorResponse.class),
 
     })
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void removeHouse(@PathVariable String houseId) {
         housesManagementService.removeHouse(houseId);
     }

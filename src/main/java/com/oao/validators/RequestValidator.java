@@ -11,6 +11,7 @@ import java.util.Objects;
 @Component
 public class RequestValidator {
 
+    public static final String SPACE = " ";
     private final HousesManagementDAO housesManagementDAO;
 
     @Autowired
@@ -22,6 +23,27 @@ public class RequestValidator {
 
         if (housesManagementDAO.hasHouse(houseId) != 1) {
             throw new HousesManagementException("House with id " + houseId + " not found", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    public void validateHouseRequest(String houseNumber, String streetName, int postalCode, String owner) {
+        if (housesManagementDAO.hasHouse(houseNumber, streetName, postalCode, owner) == 1) {
+            StringBuilder message = new StringBuilder();
+            message.append("House with number: ");
+            message.append(houseNumber);
+            message.append(SPACE);
+            message.append("in street: ");
+            message.append(streetName);
+            message.append(SPACE);
+            message.append("with owner: ");
+            message.append(owner);
+            message.append(SPACE);
+            message.append("and postal code: ");
+            message.append(postalCode);
+            message.append(SPACE);
+            message.append("has been already created.");
+            throw new HousesManagementException(message.toString(),
+                    HttpStatus.BAD_REQUEST);
         }
     }
 }

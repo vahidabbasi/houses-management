@@ -1,6 +1,5 @@
 package com.oao.validators;
 
-import ch.qos.logback.core.status.ErrorStatus;
 import com.oao.exceptions.HousesManagementException;
 import com.oao.repository.HousesManagementDAO;
 import org.junit.Test;
@@ -11,7 +10,9 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 
 import static com.oao.utils.TestUtils.HOUSE_ID;
+import static com.oao.utils.TestUtils.*;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -27,6 +28,29 @@ public class RequestValidatorTest {
 
     @Test
     public void shouldBeValidHouseCreationRequest() {
+        when(housesManagementDAO.hasHouse(anyString(), anyString(), anyInt(), anyString())).thenReturn(0);
+
+        requestValidator.validateHouseRequest(HOUSE_NUMBER, STREET_NAME, POSTAL_CODE, OWNER);
+
+        verify(housesManagementDAO).hasHouse(HOUSE_NUMBER, STREET_NAME, POSTAL_CODE, OWNER);
+    }
+
+    @Test
+    public void shouldBeThrowBadRequestIfHouseHasAlreadyCreated() {
+        when(housesManagementDAO.hasHouse(anyString(), anyString(), anyInt(), anyString())).thenReturn(1);
+
+        try {
+            requestValidator.validateHouseRequest(HOUSE_NUMBER, STREET_NAME, POSTAL_CODE, OWNER);
+            fail("Expected HousesManagementException");
+        } catch (HousesManagementException e) {
+            assertEquals(HttpStatus.BAD_REQUEST, e.getHttpStatus());
+            verify(housesManagementDAO).hasHouse(HOUSE_NUMBER, STREET_NAME, POSTAL_CODE, OWNER);
+        }
+
+    }
+
+    @Test
+    public void shouldBeValidRequestForRemoving() {
         when(housesManagementDAO.hasHouse(anyString())).thenReturn(1);
 
         requestValidator.validateRemoveHouseRequest(HOUSE_ID);
@@ -35,7 +59,7 @@ public class RequestValidatorTest {
     }
 
     @Test
-    public void shouldThrowHousesManagementExceptionWhenHouseDoesNotExist() {
+    public void shouldThrowNotFoundIfHouseDoesNotExistAndTryToRemoveIt() {
         when(housesManagementDAO.hasHouse(anyString())).thenReturn(0);
 
         try {

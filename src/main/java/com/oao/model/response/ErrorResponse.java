@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ErrorResponse {
     @ApiModelProperty(value = "An optional message that may detail the error.", example = "Please enter right value " +
             "with correct format")

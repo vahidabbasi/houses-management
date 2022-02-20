@@ -44,6 +44,8 @@ public class HousesManagementExceptionHandler {
         return badRequest(fieldError.getField() + ": " + fieldError.getDefaultMessage());
     }
 
+
+
     /**
      * Returns an INTERNAL_SERVER_ERROR to the client with the given error message.
      */

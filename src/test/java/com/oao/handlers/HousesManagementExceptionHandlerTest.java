@@ -2,6 +2,7 @@ package com.oao.handlers;
 
 import com.oao.exceptions.HousesManagementException;
 import com.oao.model.response.ErrorResponse;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -20,7 +21,7 @@ import static org.mockito.Mockito.when;
 public class HousesManagementExceptionHandlerTest {
     private static final String MESSAGE = "Exception message";
 
-    private final HousesManagementExceptionHandler exceptionHandler = new HousesManagementExceptionHandler();
+    private HousesManagementExceptionHandler exceptionHandler = new HousesManagementExceptionHandler();
 
     @Mock
     private MethodArgumentNotValidException methodArgumentNotValidException;

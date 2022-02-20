@@ -26,6 +26,7 @@ public class HousesManagementService {
 
     public String saveHouse(String houseNumber, String streetName, int postalCode, String owner) {
         log.info("Save house in database");
+        requestValidator.validateHouseRequest(houseNumber, streetName, postalCode, owner);
         return housesManagementDAO.saveHouse(houseNumber, streetName, postalCode, owner);
     }
 

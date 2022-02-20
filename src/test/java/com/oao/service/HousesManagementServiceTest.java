@@ -1,6 +1,7 @@
 package com.oao.service;
 
 import com.oao.repository.HousesManagementDAO;
+import com.oao.validators.RequestValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -19,6 +20,9 @@ public class HousesManagementServiceTest {
     @Mock
     private HousesManagementDAO housesManagementDAO;
 
+    @Mock
+    private RequestValidator requestValidator;
+
     @InjectMocks
     private HousesManagementService housesManagementService;
 
@@ -29,6 +33,7 @@ public class HousesManagementServiceTest {
         String actualResponse = housesManagementService.saveHouse(HOUSE_NUMBER, STREET_NAME, POSTAL_CODE, OWNER);
 
         verify(housesManagementDAO).saveHouse(HOUSE_NUMBER, STREET_NAME, POSTAL_CODE, OWNER);
+        verify(requestValidator).validateHouseRequest(HOUSE_NUMBER, STREET_NAME, POSTAL_CODE, OWNER);
         assertEquals(HOUSE_ID, actualResponse);
     }
 
@@ -37,5 +42,6 @@ public class HousesManagementServiceTest {
         housesManagementService.removeHouse(HOUSE_ID);
 
         verify(housesManagementDAO).removeHouse(HOUSE_ID);
+        verify(requestValidator).validateRemoveHouseRequest(HOUSE_ID);
     }
 }
