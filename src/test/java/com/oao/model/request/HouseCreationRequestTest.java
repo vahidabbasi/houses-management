@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 public class HouseCreationRequestTest extends AbstractValidatorTest {
 
     private HouseCreationRequest houseCreationRequest;
-    private static final List<Integer> INVALID_POSTAL_CODE = Arrays.asList(0, -100, null);
+    private static List<Integer> INVALID_POSTAL_CODE = Arrays.asList(0, -100, null);
 
     @Before
     public void before() {
@@ -48,7 +48,7 @@ public class HouseCreationRequestTest extends AbstractValidatorTest {
         INVALID_POSTAL_CODE.forEach(value -> assertFalse(isPostalCodeValid(value)));
     }
 
-    private boolean isPostalCodeValid(final Integer value) {
+    private boolean isPostalCodeValid(Integer value) {
         houseCreationRequest.setPostalCode(value);
         return isRequestValid(houseCreationRequest);
     }

@@ -38,11 +38,4 @@
             <dropTable tableName="house_info"/>
         </rollback>
     </changeSet>
-    <!--changeSet author="vahid abbasi" id="2">
-        <addUniqueConstraint
-                columnNames="house_number, street_name, postal_code, owner"
-                constraintName="unique_constraint"
-                tableName="house_info"
-        />
-    </changeSet-->
 </databaseChangeLog>

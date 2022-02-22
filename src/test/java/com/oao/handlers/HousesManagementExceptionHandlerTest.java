@@ -35,7 +35,7 @@ public class HousesManagementExceptionHandlerTest {
     @Test
     public void shouldHandleGeneralException() {
 
-        final ResponseEntity responseEntity = exceptionHandler.handleException(new Exception());
+        ResponseEntity responseEntity = exceptionHandler.handleException(new Exception());
 
         assertEquals(HttpStatus.SERVICE_UNAVAILABLE, responseEntity.getStatusCode());
         assertEquals(ErrorResponse.builder().build(), responseEntity.getBody());
@@ -43,9 +43,9 @@ public class HousesManagementExceptionHandlerTest {
 
     @Test
     public void shouldHandleHousesManagementException() {
-        final HousesManagementException housesManagementException = new HousesManagementException(MESSAGE);
+        HousesManagementException housesManagementException = new HousesManagementException(MESSAGE);
 
-        final ResponseEntity responseEntity = exceptionHandler.handleHousesManagementException(housesManagementException);
+        ResponseEntity responseEntity = exceptionHandler.handleHousesManagementException(housesManagementException);
 
         assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
         assertEquals(ErrorResponse.builder().message(MESSAGE).build(), responseEntity.getBody());
@@ -53,9 +53,9 @@ public class HousesManagementExceptionHandlerTest {
 
     @Test
     public void shouldHandleHttpMessageNotReadableException() {
-        final HttpMessageNotReadableException housesManagementException = new HttpMessageNotReadableException(MESSAGE);
+        HttpMessageNotReadableException housesManagementException = new HttpMessageNotReadableException(MESSAGE);
 
-        final ResponseEntity responseEntity = exceptionHandler.handleHttpMessageNotReadableException(housesManagementException);
+        ResponseEntity responseEntity = exceptionHandler.handleHttpMessageNotReadableException(housesManagementException);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
         assertEquals(ErrorResponse.builder().message("Format not supported").build(), responseEntity.getBody());
@@ -68,7 +68,7 @@ public class HousesManagementExceptionHandlerTest {
         when(fieldError.getField()).thenReturn("field");
         when(fieldError.getDefaultMessage()).thenReturn("ArgumentNotValid");
 
-        final ResponseEntity responseEntity = exceptionHandler.handleMethodArgumentNotValidException(methodArgumentNotValidException);
+        ResponseEntity responseEntity = exceptionHandler.handleMethodArgumentNotValidException(methodArgumentNotValidException);
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
         assertEquals(ErrorResponse.builder().message("field: ArgumentNotValid").build(), responseEntity.getBody());
     }

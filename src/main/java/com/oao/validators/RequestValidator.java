@@ -11,8 +11,8 @@ import java.util.Objects;
 @Component
 public class RequestValidator {
 
-    public static final String SPACE = " ";
-    private final HousesManagementDAO housesManagementDAO;
+    public static String SPACE = " ";
+    private HousesManagementDAO housesManagementDAO;
 
     @Autowired
     public RequestValidator(HousesManagementDAO housesManagementDAO) {

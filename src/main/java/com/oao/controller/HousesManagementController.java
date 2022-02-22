@@ -21,7 +21,7 @@ import java.net.HttpURLConnection;
 @Api("A REST-controller to handle various request to service")
 public class HousesManagementController {
 
-    private final HousesManagementService housesManagementService;
+    private HousesManagementService housesManagementService;
 
     @Autowired
     public HousesManagementController(HousesManagementService housesManagementService) {
@@ -29,23 +29,23 @@ public class HousesManagementController {
         this.housesManagementService = housesManagementService;
     }
 
-    @PostMapping("/house")
+    @PostMapping(value ="/house", produces = "application/json")
     @ApiOperation(value = "Create the house")
     @ApiResponses(value = {
             @ApiResponse(code = HttpURLConnection.HTTP_CREATED, message = "House has been created.", response = CreateHouseResponse.class),
             @ApiResponse(code = HttpURLConnection.HTTP_BAD_REQUEST, message = "The request is missing or have badly formatted"),
             @ApiResponse(code = HttpURLConnection.HTTP_UNAVAILABLE, message = "Server error", response = ErrorResponse.class)
     })
-    public CreateHouseResponse saveHouse(@RequestBody @Valid HouseCreationRequest transferMoneyRequest) {
-        String houseId = housesManagementService.saveHouse(transferMoneyRequest.getHouseNumber(), transferMoneyRequest.getStreetName(),
-                transferMoneyRequest.getPostalCode(), transferMoneyRequest.getOwner());
+    public CreateHouseResponse saveHouse(@RequestBody @Valid HouseCreationRequest houseCreationRequest) {
+        String houseId = housesManagementService.saveHouse(houseCreationRequest.getHouseNumber(), houseCreationRequest.getStreetName(),
+                houseCreationRequest.getPostalCode(), houseCreationRequest.getOwner());
 
         return CreateHouseResponse.builder()
                 .houseId(houseId)
                 .build();
     }
 
-    @DeleteMapping("/houses/{houseId}")
+    @DeleteMapping(value = "/houses/{houseId}", produces = "application/json")
     @ApiOperation(value = "Delete related house form database")
     @ApiResponses(value = {
             @ApiResponse(code = HttpURLConnection.HTTP_NO_CONTENT, message = "House has been deleted"),

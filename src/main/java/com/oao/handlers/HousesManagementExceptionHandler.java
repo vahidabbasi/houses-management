@@ -38,13 +38,11 @@ public class HousesManagementExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity handleMethodArgumentNotValidException(final MethodArgumentNotValidException exception) {
+    public ResponseEntity handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
         log.error("MethodArgumentNotValidException: ", exception);
-        final FieldError fieldError = exception.getBindingResult().getFieldError();
+        FieldError fieldError = exception.getBindingResult().getFieldError();
         return badRequest(fieldError.getField() + ": " + fieldError.getDefaultMessage());
     }
-
-
 
     /**
      * Returns an INTERNAL_SERVER_ERROR to the client with the given error message.

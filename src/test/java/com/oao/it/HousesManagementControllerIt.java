@@ -34,7 +34,7 @@ import static org.junit.Assert.assertTrue;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Import(IntegrationTestConfiguration.class)
-public class HouseManagementControllerIt {
+public class HousesManagementControllerIt {
 
     @Autowired
     RestTemplate testRestTemplate;
@@ -69,10 +69,10 @@ public class HouseManagementControllerIt {
         try {
             saveHouse(houseCreationRequest);
             fail("Expected 400 exception");
-        } catch (final HttpClientErrorException e) {
+        } catch (HttpClientErrorException e) {
             assertEquals(HttpStatus.BAD_REQUEST, e.getStatusCode());
-            final ObjectMapper mapper = new ObjectMapper();
-            final ErrorResponse response = mapper.readValue(e.getResponseBodyAsString(), ErrorResponse.class);
+            ObjectMapper mapper = new ObjectMapper();
+            ErrorResponse response = mapper.readValue(e.getResponseBodyAsString(), ErrorResponse.class);
             assertTrue(response.getMessage().contains("postalCode: must not be null"));
         }
     }
@@ -86,10 +86,10 @@ public class HouseManagementControllerIt {
             //Try to create same house
             saveHouse(houseCreationRequest);
             fail("Expected 400 exception");
-        } catch (final HttpClientErrorException e) {
+        } catch (HttpClientErrorException e) {
             assertEquals(HttpStatus.BAD_REQUEST, e.getStatusCode());
-            final ObjectMapper mapper = new ObjectMapper();
-            final ErrorResponse response = mapper.readValue(e.getResponseBodyAsString(), ErrorResponse.class);
+            ObjectMapper mapper = new ObjectMapper();
+            ErrorResponse response = mapper.readValue(e.getResponseBodyAsString(), ErrorResponse.class);
             assertTrue(response.getMessage().contains("has been already created"));
         }
         //clean database
@@ -112,16 +112,16 @@ public class HouseManagementControllerIt {
         try {
             removeHouse(response.getBody().getHouseId());
             fail("Expected 404 exception");
-        } catch (final HttpClientErrorException e) {
+        } catch (HttpClientErrorException e) {
             assertEquals(HttpStatus.NOT_FOUND, e.getStatusCode());
-            final ObjectMapper mapper = new ObjectMapper();
-            final ErrorResponse errorResponse = mapper.readValue(e.getResponseBodyAsString(), ErrorResponse.class);
+            ObjectMapper mapper = new ObjectMapper();
+            ErrorResponse errorResponse = mapper.readValue(e.getResponseBodyAsString(), ErrorResponse.class);
             assertTrue(errorResponse.getMessage().contains("not found"));
         }
     }
 
     private ResponseEntity<Void> removeHouse(String houseId) {
-        final Map<String, Object> params = ImmutableMap.of(
+        Map<String, Object> params = ImmutableMap.of(
                 "houseId", houseId);
         return testRestTemplate.exchange(BASE_URL + REMOVE_HOUSE_URL, HttpMethod.DELETE, null, Void.class, params);
     }

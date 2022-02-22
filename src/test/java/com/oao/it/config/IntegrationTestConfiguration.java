@@ -11,8 +11,8 @@ import org.springframework.web.client.RestTemplate;
 public class IntegrationTestConfiguration {
 
     @Bean("testRestTemplate")
-    public RestTemplate testRestTemplate(final RestTemplateBuilder builder) {
-        final RestTemplate restTemplate = builder
+    public RestTemplate testRestTemplate(RestTemplateBuilder builder) {
+        RestTemplate restTemplate = builder
                 .build();
 
         restTemplate.setRequestFactory(

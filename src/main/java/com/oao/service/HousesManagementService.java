@@ -12,8 +12,8 @@ import java.util.Objects;
 @Service
 public class HousesManagementService {
 
-    private final HousesManagementDAO housesManagementDAO;
-    private final RequestValidator requestValidator;
+    private HousesManagementDAO housesManagementDAO;
+    private RequestValidator requestValidator;
 
 
     @Autowired
