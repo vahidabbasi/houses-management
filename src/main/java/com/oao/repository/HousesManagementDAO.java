@@ -1,9 +1,13 @@
 package com.oao.repository;
 
+import com.oao.model.response.House;
+import org.jdbi.v3.sqlobject.config.RegisterConstructorMapper;
 import org.jdbi.v3.sqlobject.customizer.Bind;
 import org.jdbi.v3.sqlobject.statement.GetGeneratedKeys;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 import org.jdbi.v3.sqlobject.statement.SqlUpdate;
+
+import java.util.ArrayList;
 
 
 public interface HousesManagementDAO {
@@ -20,4 +24,8 @@ public interface HousesManagementDAO {
 
     @SqlQuery("select count(*) from HOUSE_INFO where HOUSE_NUMBER= :houseNumber and STREET_NAME= :streetName and POSTAL_CODE= :postalCode and OWNER= :owner and DELETED_AT IS null")
     int hasHouse(@Bind("houseNumber") String houseNumber, @Bind("streetName") String streetName, @Bind("postalCode") int postalCode, @Bind("owner") String owner);
+
+    @SqlQuery("select * from HOUSE_INFO where DELETED_AT IS null order by house_id desc")
+    @RegisterConstructorMapper(House.class)
+    ArrayList<House> getHouses();
 }

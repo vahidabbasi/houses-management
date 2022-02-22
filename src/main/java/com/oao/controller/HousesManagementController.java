@@ -3,6 +3,8 @@ package com.oao.controller;
 import com.oao.model.request.HouseCreationRequest;
 import com.oao.model.response.CreateHouseResponse;
 import com.oao.model.response.ErrorResponse;
+import com.oao.model.response.GetHousesResponse;
+import com.oao.model.response.House;
 import com.oao.service.HousesManagementService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Objects;
 import javax.validation.Valid;
 import java.net.HttpURLConnection;
@@ -56,5 +59,22 @@ public class HousesManagementController {
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void removeHouse(@PathVariable String houseId) {
         housesManagementService.removeHouse(houseId);
+    }
+
+
+    @GetMapping(value = "/houses", produces = "application/json")
+    @ApiOperation(value = "Get ordered house form database")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpURLConnection.HTTP_NO_CONTENT, message = "return all houses in order"),
+            @ApiResponse(code = HttpURLConnection.HTTP_INTERNAL_ERROR, message = "Server error", response = ErrorResponse.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "If the house id is not found.", response = ErrorResponse.class),
+
+    })
+    public GetHousesResponse orderedHouses() {
+        ArrayList<House> houses = housesManagementService.orderedHouses();
+
+        return GetHousesResponse.builder()
+                .houses(houses)
+                .build();
     }
 }
